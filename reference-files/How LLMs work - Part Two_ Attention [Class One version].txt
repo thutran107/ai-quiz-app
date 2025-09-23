@@ -1,0 +1,182 @@
+How LLMs Work
+Part Two: Attention [Class One version]
+
+
+by Alin Bui
+June 2025
+
+AI Foundations
+
+Agenda
+Introduction 
+Predicting and Generating Text
+Transformers
+Embedding
+Attention
+MLP
+Unembedding
+Pre-Training
+Post-Training
+Inference
+Math Basis
+* Covered in Part One
+
+Recap of Part One
+
+Tracking a Token through the LLM
+
+
+
+Transformer Simplified - what you will be tested on
+Tokenization
+Embedding
+Attention
+MLP
+Unembedding
+
+Transformer 
+Architecture
+in LLM
+Tokenization
+
+
+Tokenization
+Play around with Tiktokenizer
+
+Transformer 
+Architecture
+in LLM
+Tokenization
+Embedding
+
+
+Embedding
+
+Any Confusion from Part One?
+
+Quiz Time
+
+Positional Encoding
+
+Why Parallel Processing
+Speed and Scalability
+GPUs: parallelized matrix operations
+Long-range context
+Can see entire sequence at once
+Learn relationships between distant tokens
+Self-attention
+To compare every token to every other token, need to consider all tokens together
+
+Transformer Layers
+Linear Projection to QKV (Query-Key-Value)
+Self-Attention
+ This is where the token gathers context from surrounding tokens.
+Multi-Head Attention
+This allows the model to learn different perspectives of context at once (e.g., grammar, meaning, structure).
+Add & Normalize
+The original input is added back to the attention output (residual connection), then the result is normalized to stabilize learning.
+Feedforward / MLP
+This transforms the vector in a non-linear way, enabling deeper representations.
+Add & Normalize again
+Now the token is ready to pass to the next layer. Repeat this process through all Transformer layers.
+
+Transformer 
+Architecture
+in LLM
+Tokenization
+Embedding
+Transformer Blocks
+Attention
+
+
+Token vector–with no context–are all the same
+
+Moving the vector to its correct semantic orientation
+
+Attention allows context to provide semantic direction
+
+Why Attention matters
+Not all words are equally important.
+Attention assigns importance scores to other tokens.
+
+
+Self-attention explained
+Each token looks at all others and gathers context.
+Produces a context-aware vector for each token.
+
+
+Attention encodes context into the vectors (via linear transformation) 
+
+Context provided at long distances (within context window)
+
+Context size in Attention layer
+GPT 3
+12,288 dimensions
+2048 tokens
+
+Context Window
+The context window is the maximum number of tokens the model can "see" in a single forward pass. This includes all tokens from the beginning of the input up to the current point.*
+If the relevant context is outside that window (i.e., many pages back), then the model cannot access it directly unless special techniques are used.
+
+*factoring causal masking
+
+Context Window Sizes of different models
+Token counts roughly translate like this:
+1 token ≈ ¾ of a word
+1,000 tokens ≈ 750 words (about 1.5 pages of dense text)
+128,000 tokens ≈ 100,000 words (possibly 200+ pages)
+So, GPT-4o with 128K tokens can understand entire chapters or even short books in one go — meaning it can incorporate very distant context, even if it's 50–100 pages earlier.
+
+Study on your own
+
+All context incorporated in the final vector
+If context is a murder mystery novel, then it’s possible that the final vector can encode for the name of the murderer–because all the context of the novel has been incorporated into that final vector.
+
+Hypothetical Example of Attention
+
+Embedding + Positional Encoding
+
+Goal is to compute towards new embeddings with context
+
+Compute using matrix-vector multiplication
+
+How a token solicits context–by asking the other tokens
+
+Computing context in attention
+Query-Key-Value
+
+This is called a Query, represented by its own vector
+The query vector is smaller than the full dimensions of the embedding
+
+Computing the Query Vector
+Multiply the smaller Query Matrix times the embedding for “creature”.
+One query matrix per attention head.
+
+Notation for computing the query vector
+Multiply the query matrix WQ 
+times the embedding vector E4
+results in the query vector Q4
+
+One query vector for each token
+
+Encodes Query vector in a smaller dimensional space
+
+Multiply a second Key Matrix times the embeddings
+Generates Key vectors
+
+Key vectors are answering the query vector
+
+Encodes Key vector in the same small Query/Key space
+
+Query matches the Key if the vectors align
+Question: What does alignment mean mathematically?
+
+Calculate Alignment via Dot Product of Key-Query Pair
+Question: Who can describe all the notation in this table?
+
+Sources
+ChatGPT
+3Blue1Brown Neural Networks Course
+Andrej Karpathy Deep Dive into LLMs like ChatGPT
+
+End of Part Two

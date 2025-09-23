@@ -1,0 +1,379 @@
+Topic #3: 
+MEMORY in AI AGENTS
+July 3, 2025By An La
+
+Table of Contents
+AI Model VS AI Agent
+Why Memory Matters in AI Agents
+Types of Memory in AI Agents (LLM-based)
+How AI Agents Manage Their Memory
+Different Types of AI Agent Memory in n8n + Demo Workflow
+
+Part 1:
+AI Model VS AI Agent
+
+Part 1: AI Model VS AI Agent
+
+AI Model
+AI Agent
+Definition
+A program or a mathematical construct that has been trained on a dataset to recognize patterns, make predictions, or generate outputs
+A system that uses AI models to perceive, reason, act, and learn in an environment to achieve goals
+Characteristics
+Compute outputs from inputs
+Stateless (no memory of previous context)
+Trained on data
+Can be used by multiple systems/agents
+Can be fine-tuned or retrained
+Can interact with environment or user
+Can have memory
+Can learn during operation
+May use multiple AI models
+
+Part 2:
+Why Memory Matters in AI Agents
+
+Part 2: Why Memory Matters in AI Agents
+
+
+Part 2: Why Memory Matters in AI Agents
+
+Context Awareness
+Understand what happened before
+Maintain continuity in long tasks
+Learning from Experience
+Store outcomes of actions (success/failure)
+Improve decision-making over time
+Avoid repeating mistakes
+Multitasking
+Some project requires multi-step reasoning or progress→ Can process all the steps simultaneously to achieve the gold→ Track what steps have been completed
+
+
+Part 3:
+Types of Memory in AI Agents (LLM-based)
+
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory
+Buffering
+Relevance Filtering
+Summarization
+Long-term Memory
+Semantic Memory
+Episodic Memory
+Procedural Memory
+
+Short-term Memory (Working Memory/Conversational Context): 
+temporary memory system that stores recent information relevant to the current task, session, or conversation
+stored in RAM on the server where the AI is running.
+3 main mechanisms:
+(1) Buffering
+(2) Relevance Filtering
+(3) Summarization
+Part 3: Types of Memory in AI Agents (LLM-based) 
+
+(1) Buffering
+1
+What it is:
+Involves storing a direct, unedited log of recent messages or interactions within the agent's active context
+2
+How it works:
+As new messages come in, older messages are dropped from the buffer once a certain token limit or number of turns is reached
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory (Working Memory/Conversational Context): 
+
+(1) Buffering
+3
+Purposes
+To provide immediate conversational continuity
+Simple and efficient for short interactions
+4
+Limitations
+Context length limits: As the conversation grows, older, but potentially relevant, information might be dropped.
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory (Working Memory/Conversational Context): 
+
+(2) Relevance Filtering
+
+1
+What it is
+The AI agent trims irrelevant information (like greetings, small talk, or outdated instructions) from the interaction history, and keep the most recent entries
+2
+How it works
+Convert past messages or memory entries into embeddings
+Convert the current query or task into an embedding
+Compute similarity between each memory item and the current query/task
+Keep the most relevant past information and trim the irrelevant one to free up memory
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory (Working Memory/Conversational Context): 
+
+(2) Relevance Filtering
+
+3
+Purposes
+Context Window Management: Stay within the LLM’s token limit
+Keep the agent focused on the user’s current task or question without being distracted by the irrelevant information
+Pre-filter information before summarizing or storing
+4
+Limitations
+Relevance isn’t always objectively defined
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory (Working Memory/Conversational Context): 
+
+(3) Summarization
+
+1
+What it is
+Instead of keeping every single message, the AI agent periodically condenses the past conversation history into a more concise summary
+2
+How it works
+When the number of tokens in the current conversation history approaches a predefined threshold (e.g., 75% or 90% of the LLM's maximum context window), it triggers the summarization process - a portion of the older messages is fed to the LLM with a prompt asking it to generate a summary
+This summary then replaces or supplements the original raw messages in the memory, freeing up space while retaining key information
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory (Working Memory/Conversational Context): 
+
+(3) Summarization
+
+3
+Purposes
+Overcoming context limits: Allows for much longer "effective" conversations by compressing older information
+Cost optimization: Reduces the total number of tokens sent in subsequent prompts
+4
+Limitations
+Loss of detail: Summarization inherently means some specific details might be lost if they are not deemed "important" enough for the summary.
+Misinterpretation: It might get the words right but miss the underlying intent, core message, or how different pieces of information connect.
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Short-term Memory (Working Memory/Conversational Context): 
+
+Part 3: Types of Memory in AI Agents (LLM-based) 
+How Buffering, Relevance Filtering, and Summarization are combined
+User: "Hi, I have a problem with my internet. It's been really slow since yesterday morning." (Initial message)
+Memory: "Buffering" the raw message.
+Agent: "I see. Can you tell me your account number?"
+User: "It's 123456789. Also, I noticed my smart TV keeps disconnecting." (Immediate follow-up, new topic)
+Memory: The buffer now contains the account number and the new issue.
+Agent: "Thank you. Let me check your connection. While I do that, can you confirm if you've tried restarting your modem?"
+User: "Yes, I did that twice. No change. And about my smart TV, it's a Samsung QLED."(Conversation getting longer)
+
+Part 3: Types of Memory in AI Agents (LLM-based) 
+How Buffering, Summarization and Relevance Filtering are combined
+Memory: The buffer is growing. The system might start to prepare for summarization.
+Relevance Buffering: The system notes "internet slow," "account number," "smart TV disconnecting," "Samsung QLED" as highly relevant. The initial "Hi" and "Thank you" are filtered out or de-prioritized.
+Summarization happens: The AI agent (or a dedicated summarization model) is prompted to summarize the early parts.
+Summary (compacted): "User reported slow internet (acc: 123456789) and smart TV disconnection (Samsung QLED)."
+⇒ The raw older messages are replaced by this summary in the context passed to the main LLM
+
+Part 3: Types of Memory in AI Agents (LLM-based) 
+How Buffering, Summarization and Relevance Filtering are combined
+(Later in conversation)
+User: "So, what about the TV? Is that related to the internet problem?"
+Agent (using the summary + current buffer): "Based on our conversation, you're experiencing slow internet on account 123456789, and your Samsung QLED smart TV is disconnecting. These issues can often be related…” (the conversation continues)
+
+
+Long-term Memory: 
+designed to persist information beyond a single session or task
+helps the agent retain useful knowledge and experiences to improve performance, personalization, reasoning, and learning over time
+stored in hard drives (SSDs, HDDs) on the server where the AI is running
+3 main types of long-term memory:
+(1) Semantic memory
+(2) Episodic memory
+(3) Procedural memory
+Part 3: Types of Memory in AI Agents (LLM-based) 
+
+(1) Semantic Memory
+1
+What it is:
+Stores general facts, concepts, and knowledge about the world or a user, without being tied to a specific time or event
+2
+How it works:
+Run by a rule-based logic to continuously check what information in the conversation is fact, concept, or knowledge
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Long-term Memory: 
+
+(1) Semantic Memory
+3
+Purposes:
+Enables question answering, planning, and dialogue generation with factual consistency
+Provides background knowledge that the AI can apply across different tasks
+4
+Limitations:
+Static: Needs frequent updates to stay current
+Doesn’t include context or personal experiences
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Long-term Memory: 
+
+(2) Episodic Memory
+1
+What it is:
+Stores specific past experiences, events, and interactions, along with their context
+2
+How it works:
+Run by a rule-based logic to continuously check what information in the conversation is related to experience, event, timestamped
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Long-term Memory: 
+
+(2) Episodic Memory
+3
+Purposes:
+Allows personalization by remembering user preferences, past decisions, or errors
+Enables learning from experience, like avoiding past mistakes
+Critical for dialogue continuity and adaptive behavior over time
+4
+Limitations:
+Static: Needs frequent updates to stay current
+Scalability: Large episodic memory can become inefficient without filtering
+Privacy concerns: Stores potentially sensitive data
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Long-term Memory: 
+
+(3) Procedural Memory
+1
+What it is:
+Stores how-to knowledge—the memory of skills, rules, and procedures
+2
+How it works:
+Often embedded in the AI's architecture, code, and training.
+Can involve the weights of an LLM that embody learned patterns, or explicit rules and scripts defined by developers
+Often learned through repetitive practice, simulation, or instructions
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Long-term Memory: 
+
+(3) Procedural Memory
+3
+Purposes:
+Automation and Efficiency: Enables the AI to perform automated functions and multi-step sequences consistently and efficiently.
+Task Execution: Provides the "know-how" for the AI to perform specific actions, reasoning, and decision-making
+4
+Limitations:
+Can limit the AI's adaptability to novel situations or unexpected changes → need manual re-instruction
+Task-specific: Doesn’t generalize well to new, unseen procedures
+Part 3: Types of Memory in AI Agents (LLM-based) 
+Long-term Memory: 
+
+User: Hey, I'm thinking about starting a new project. I want to create a podcast.
+Chatbot: A podcast is a fantastic project! There are many moving parts, from recording to distribution. I can definitely help you structure the process. To start, what's the main topic you're thinking of?
+User: I want it to be about the history of retro video games. I'm going to call it "PixelVibe." In my mind, a "PixelVibe" is the unique feeling or aesthetic that a classic video game gives you.
+Chatbot: That's a very creative name and concept. I'll add that to my knowledge base for our project: "PixelVibe" is the unique aesthetic or feeling evoked by a retro video game. This will help me understand the tone you're aiming for.
+User: Exactly! Now, last time we worked together on that YouTube channel idea back in January, I got totally overwhelmed with all the equipment research and gave up. It was just too much at once.
+Chatbot: I recall that. For your "Retro Gaming History" YouTube project, we made a very long list of cameras, lighting, and capture cards, and you mentioned it felt like too much to tackle. I understand the need to avoid that feeling of being overwhelmed. We can take a much more phased approach this time.
+User: I'd appreciate that. So, what's the absolute first step I should take to get the "PixelVibe" podcast off the ground without getting buried in details?
+Chatbot: Absolutely. Let's start with a simple, manageable process focused only on creating your first episode.Step 1: The first thing to do is to choose a single game for your first episode. This narrows your focus; Step 2: Next, you need to write a basic script or outline for that episode. It doesn't have to be perfect, just a guide for you to talk through; Step 3: Then, you will record the audio. For now, you can simply use the voice memo app on your smartphone to keep the technical side simple.
+User: I prefer to always find a theme as the very first step.
+Understanding Check: Determine which info is stored as semantic memory, episodic memory, and procedural memory?
+
+Part 4:
+How AI Agents Manage Their Memory
+
+Common Types of Stored Data
+Part 4: How AI Agents Manage Their Memory
+
+Part 4: How AI Agents Manage Their Memory 
+Short-term Memory (Working Memory/Conversational Context): 
+Capture
+Not really “capture” but everything is in the ‘context window’
+Store (mentioned above)
+Retrieve
+Attention Mechanism: The model assigns attention weights to different parts of the conversation, focusing more on tokens that are likely relevant to the current question (dot products between Q and K vectors of all tokens, and then softmax → higher score = higher relevance)
+Forget
+When the context window is full, older information is "forgotten." Even if the AI is instructed to "forget" something from its short-term memory, it only ignores the information, as it remains visible within the context window.
+
+Part 4: How AI Agents Manage Their Memory 
+Short-term Memory (Working Memory/Conversational Context): 
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Capture (based on user prompt)
+Explicit instruction 
+e.g. “Remember this…”
+Repeat some information often
+Explicit labeling
+e.g. Name, Address, Location, etc.
+Feedback loops for learning
+e.g. If an AI agent attempts to use a piece of information and it leads to a successful outcome (e.g., it remembers your preference for coffee, and you confirm that was helpful), this positive reinforcement could strengthen the "memory" of that preference
+Store (mentioned above)
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Retrieve
+Keyword/metadata search: 
+e.g., [user_id: 123]; [topic: budget]; [timestamp: 2024-04-01]
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Retrieve
+Semantic search (Embedding Similarity): Convert the whole current query into a vector → compare this vector with stored vectors in the long-term memory using cosine similarity → retrieve high similarity information
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Retrieve
+Knowledge graph (KG) search: Identify the entities and relations in the input query and in the database to form the result
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Retrieve
+Retrieval-Augmented Generation (RAG): Combine retrieval (like Embedding-based search) with language generation by inserting relevant documents or memories into the model's input
+Example (next slide)
+
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Retrieve
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+How Keyword/metadata filtering, Embedding-based search, KG traversal, and RAG are combined
+
+
+
+Part 4: How AI Agents Manage Their Memory 
+Long-term Memory: 
+Forget
+Similar to short-term memory, the stored data is not actually deleted from the databaseunless	(1) delete manually from the database	(2) add steps in the workflow that identify & delete the memory
+Explicit instruction 
+e.g. “Forget this…”
+Overwriting
+e.g. “Actually, my name is …”
+Expiry Rules
+e.g. Some AI agents auto-delete memory after 30 days
+Feedback loops for learning
+e.g. “That’s wrong”, “That’s outdated info”, etc.
+
+Part 5:
+Different Types of AI Agent Memory in n8n
+
+Part 5: Different Types of AI Agent Memory in n8n 
+“Memory” port: for STM only
+
+Part 5: Different Types of AI Agent Memory in n8n 
+n8n doesn’t have built-in long-term memory
+Long-term memory is implemented through workflows that read/write to an external memory backend (what to remember, what to forget, etc.)
+There is no plug-and-play LTM nodes in n8n
+
+Part 5: Different Types of AI Agent Memory in n8n 
+Recommended to plug into “Memory” port
+
+Part 5: Different Types of AI Agent Memory in n8n 
+
+Part 5: Different Types of AI Agent Memory in n8n 
+
+Part 5: Different Types of AI Agent Memory in n8n 
+
+There are many available tools to build long-term memory workflows
+Each tool has pros and cons
+Depending on the purpose of your workflow → choose the most appropriate tool(s)
+Part 5: Different Types of AI Agent Memory in n8n 
+Demo AnBOT:
+In-session short-term memory for context
+Long-term memory for user important info and meeting note
+Chat link: https://free-n8n.anduin.center/webhook/e985d15f-b2f6-456d-be15-97e0b1544a40/chat 
+
+Gemini
+ChatGPT
+https://www.ibm.com/think/topics/ai-agent-memory
+https://blog.langchain.com/memory-for-agents/
+https://medium.com/@gokcerbelgusen/memory-types-in-agentic-ai-a-breakdown-523c980921ec
+https://youtu.be/JTL0yp85FsE?si=nCAYM4cmcEOr4bWt
+https://youtu.be/VKPngyO0iKg?si=Jq2MZxnjNJ3_aFQG
+References
+
+Thank you
+Q&A

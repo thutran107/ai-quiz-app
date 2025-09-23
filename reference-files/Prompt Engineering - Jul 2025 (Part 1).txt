@@ -1,0 +1,523 @@
+PROMPT ENGINEERING
+(Part 1: Concepts)
+AI FOUNDATION CLASS 1
+Mai Anh Vu & Khoa Nguyen
+
+AGENDA
+01
+Introduction to Prompt Engineering
+02
+LLM Configurations
+03
+Prompt Techniques
+Max token
+Top-P
+Temperature
+Frequency Penalty
+Top-K
+Presence Penalty
+Zero shot & few shot
+Chain of Thought
+System, contextual and role 
+Self-Consistency
+Step-back prompting
+Tree of Thought
+Automatic prompt engineer
+ReAct
+
+Prompt engineering is the process of crafting effective inputs (prompts) to guide the LLMs to produce accurate, relevant, and useful outputs
+
+
+How does it help?
+Reduce hallucination
+Avoid giving vague or misleading responses
+Control token & API usage
+
+Introduction to Prompt Engineering
+
+LLM CONFIGURATIONS
+
+Max token
+Max number of tokens: refer to the number of tokens used to generate in a response.
+
+How it works: When setting the Max Tokens, the model will generate a response that not exceed the number of tokens selected.
+High token: for tasks need multi steps reasoning
+Low token: for chatbot or summarizing short text
+
+You can set the max token in LLM configurations or request a specific length in your prompt.
+
+Why we need to set this configuration:
+Control the output length
+Reduce errors  
+Minimize cost & usage
+Improve prompt effectiveness
+
+
+Different models will have different maximum number of tokens. Thus, we will set this number differently for each model and the prompt techniques that we choose. 
+
+Can set the max token in the LLM configurations or request a specific length in your prompt.
+
+
+
+
+
+Overview of Temperature, top-K & top-P
+Order of Operations in Token Sampling:
+Model outputs logits (raw scores for each token)
+Apply temperature to logit
+Apply softmax to convert to Probabilities
+Apply top-k or top-p filtering
+Sample one token from the filtered set
+
+
+
+To predict new token: Input -> Embedding -> Unembedding -> Logit -> Probabilities -> Pick the next token -> Sampling
+Random sampling: Choose randomly based on the probability distribution.
+The model calculates raw scores (called logits) for a
+
+
+ll possible next tokens.
+These logits are divided by the temperature value TTT.
+
+
+Temperature
+Temperature: influences how deterministic the response from the model will be.
+
+Temperature
+
+E.g: Temp = 0.2
+
+
+
+
+
+
+
+
+With low temp, the differences between logits are amplified which will sharpen distribution (one dominant token)
+Logit
+Token A
+4
+Token B
+2
+Token C
+1
+Logit scaled
+Token A
+20
+Token B
+10
+Token C
+5
+Probabilities
+4÷⅕ = 4 * 5 = 20 
+
+Temperature
+E.g: Temp = 1.5
+
+
+
+
+
+
+
+
+With high temp, the differences are smaller which is flat distribution, more randomness
+
+
+The model calculates raw scores (called lo
+Logit
+Token A
+4
+Token B
+2
+Token C
+1
+Logit scaled
+Token A
+2.6
+Token B
+1.3
+Token C
+0.6
+Probabilities
+4÷³/₂ = 4 * 2÷3= 2.6 
+To predict new token: Input -> Embedding -> Unembedding -> Logit -> Probabilities -> Pick the next token -> Sampling
+Random sampling: Choose randomly based on the probability distribution.
+
+Top-K
+After applied softmax, we have the probabilities of these token as below:
+We set K = 2
+Probabilities
+Apple
+0.5
+Cherry
+0.3
+Banana 
+0.1
+Tree
+0.05
+These 2 top probable tokens will be chosen 
+Top K is keeping only the top k highest-probability tokens
+High top K -> more creative, varied the output
+Low top K -> more factual output.
+K=1 -> means greedy decoding 
+
+Top-k may or may not be available, depending on the model you choose.
+
+Top-P
+Similar to the previous example, After applied softmax, we have the probabilities of these token as below:
+We set P = 0.9 
+Probabilities
+Apple
+0.5
+Cherry
+0.3
+Banana 
+0.1
+Tree
+0.05
+Threshold P=0.9, these 3 token will be chosen 
+Top P is choosing the set of top token until reaching the threshold of P value.
+P range from 0-1 
+P = 0: greedy decoding
+P = 1: choose all tokens, default setting 
+
+Use top P for summarization, knowledge base Q&A,etc 
+
+Top-P
+For Reference
+
+Combination & Effects
+
+As top K is not available in common model (OpenAI), we combine temperature & top-P
+However, best practice is to use either top-k or top-p, not both — and always pair with temperature.
+Effect of combining top-P with temperature
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+top_k applies a fixed-size cutoff.
+
+top_p is adaptive based on token probability.
+
+They can conflict and reduce diversity unnecessarily.
+
+Combination & Effects
+For Reference
+Example of combining temperature & top-p for each use case
+
+Frequency Penalty (Rarely used)
+Frequency penalty: a setting that reduces the likelihood of the model repeating the same tokens (words or phrases) in its output
+
+When should we use this setting?
+Writing stories or articles
+Listing ideas or suggestions
+Avoiding repeated sentences in emails or messages
+
+Not good to use if:
+You need the AI to follow a structure (like rules, code, or step)
+
+
+Frequency Penalty
+Tips to set this configuration:
+✅ Start Small
+Try 0.3 or 0.5 to see if it helps
+
+✅ Mix with Temperature
+Use it with temperature 0.7 or higher for more creative and less repetitive output
+
+Range & when to use? 
+For Reference
+
+Presence Penalty (Rarely used)
+Presence Penalty: setting used to discourage the model from repeating the same words or concepts in its response
+
+
+
+
+
+
+Presence Penalty
+Range and when to use:
+
+
+
+For Reference
+
+Key differences between Frequency & Presence Penalty
+Frequency vs Presence Penalty
+Feature
+Presence Penalty
+Frequency Penalty
+What it does
+Tells the AI to avoid using words it already mentioned once
+Tells the AI to avoid repeating the same word many times
+Focus
+Has a word or idea been used at all?
+How often a word is repeated
+Example word
+If the AI says “apple” once, it’s discouraged from saying “apple” again
+If the AI says “apple” 2–3 times, it tries not to say it again too much
+Purpose
+Pushes the AI to introduce new ideas or topics
+Pushes the AI to reword or vary expression
+Works best for
+Brainstorming, Naming ideas, Creative writing , Ad copy
+Lists, Summaries, Paragraphs with repeated structure
+Type of repetition it controls
+Idea-level repetition (saying the same word again even once)
+Word-level frequency (how many times a word is said)
+
+Frequency vs Presence Penalty
+Combination of  2 settings for different use cases 
+For Reference
+
+Where to find these configurations?
+
+Why we need to set this configuration:
+Control the output length
+Reduce errors  
+Minimize cost & usage
+Improve prompt effectiveness
+
+
+Different models will have different maximum number of tokens. Thus, we will set this number differently for each model and the prompt techniques that we choose. 
+
+Can set the max token in the LLM configurations or request a specific length in your prompt.
+
+
+
+
+
+PROMPTING TECHNIQUES
+
+Zero shot vs one-shot
+Zero - shot
+One - shot
+describes the task only with instructions and context—no example inputs/output
+the model uses its pre-trained knowledge to generate a response
+Use case: effective for straightforward tasks 
+
+ provides a single example in the prompt to help the model understand the desired output structure or pattern
+rely on example acts as a reference for the model to imitate when completing the task. 
+Use case: useful for tasks requiring specific output formats or patterns
+Few-shot prompting: includes multiple examples to further refine the model's understanding of the task.
+When:  zero-shot & one-shot approaches fail with complex tasks
+
+
+
+One - shot / Few - shot: Quality Examples
+Effective examples for a model
+High Quality (Correctness & Consistency)
+Well Written (Clarity & Brevity)
+Diversity (coverage & contrast)
+task complexity, example quality and AI model capability deciding number of examples
+
+
+Ask: Do these examples collectively expose the model to all the shapes of the problem?
+
+
+Ask: If the model mimics this, will I be happy?
+
+Ask: Is the example easy for both a human and the model to parse?
+
+
+System, contextual and role prompting
+System, contextual and role prompting are all techniques used to guide how LLMs generate text, but they focus on different aspects:
+
+System prompting: top‑level instructions that set behavior, rules, output format
+Use case: customer service bot, define core functions of a tools etc.
+Contextual prompting: supplying background facts, schemas, examples, or business rules the model must use.
+Use case: data formatting, sentiment analysis, style replication
+
+
+Role prompting: telling the model to be/act as a particular persona or job
+Use case: creative content generation, expert consultation, practicer,
+
+
+System, contextual and role prompting
+ 
+Example 1:
+
+
+
+Output ONLY one JSON object with keys: 
+- category 
+- person in charge
+- short_reason (≤ 12 words) 
+- confidence (0.00–1.00)
+Follow the label definitions exactly and never add extra text.
+
+
+
+Example 2:
+
+ 
+ Context:
+- Categories:
+  • Tooling & Access = accounts, permissions, VPN, software, repos
+  • Benefits & Policy = leave, insurance, payroll, HR policies, visas
+  • Office & Equipment = office facilities, desks, monitors, deliveries
+  • Others = anything outside the above or unclear
+- Person in charge map:
+  Tooling & Access → IT Ops
+  Benefits & Policy → People Ops
+  Office & Equipment → Office Admin
+  Others → Helpdesk
+
+
+Example 3:
+Act as the IT/People/Office triage lead who decides where each Slack request should go. Use professional, concise judgment.
+
+
+System, contextual and role prompting 
+Prompting purpose
+Typical task examples
+Why
+Strict system contract
+(JSON, deterministic classification, extraction)
+“Output ONLY valid JSON…”
+Label routing (your Slack classifier)
+Regex‑like transformations
+We want no surprises. Low T makes outputs repeatable; nucleus filtering isn’t needed because we already sharpened with temperature.
+Factual / policy context
+(lookup, brief explanations, internal Q&A)
+“Use the HR policy below to answer…”
+“Given this changelog, summarise impact”
+Slight diversity lets the model paraphrase while staying anchored to provided context.
+Role prompting for a professional persona
+“Act as a senior PM…”
+“You are a security auditor…”
+Professional prose needs some stylistic freedom but should stay coherent.
+Conversational chat‑bot
+ Company FAQ bot
+Coding assistant
+Balanced default—good first try before tightening or loosening.
+
+Step-Back Prompting
+Step‑back prompting is a two‑phase prompting recipe introduced in 2023: 
+Abstraction step – first ask the model to “take a step back” from the problem and articulate the high‑level principle, definition, or key fact that governs the answer.
+Solution step – then supply that abstraction as context and have the model finish the task.
+⇒ allows LLMs to activate relevant background knowledge and reasoning processes before attempting to solve specific problem, thus generate more accurate and insightful responses
+       encourage LLMs to think critically and apply their knowledge in new and creative ways
+Use case: technical troubleshooting, science & math problems, logical and legal reasoning
+
+
+Step-Back Prompting 
+
+Step-Back Prompting - Example
+     AI Agents are needed:
+Abstraction
+Reasoning
+2
+
+Step-Back Prompting - Takeaway
+Step‑back prompting is a minimal, model‑agnostic way to inject “think first, answer later” discipline—often matching or beating  chain‑of‑thought prompts while keeping the rationale compact and controllable
+WHY?
+Aspect
+Chain of Thought
+Step-back
+Length 
+Dozens‑to‑hundreds of tokens showing every micro‑step
+1‑3 concise sentences
+Token cost
+50‑90 % of the total cost can be the reasoning itself
+Minimal extra spend **
+Privacy / safety
+ May expose internal data, partial prompts, or sensitive reasoning paths
+Reveals only a high‑level rule
+** On many QA or reasoning tasks, step‑back reached the same or better accuracy than CoT while emitting 65–90 % fewer tokens and fixing ~40 % of the errors CoT made. It introduced only a small number of new mistakes (≈ 10 %) in those experiments. Source
+
+Automatic Prompt Engineering
+Automatic Prompt Engineering (APE):
+not only alleviates the need for human input but also enhances the model’s performance in various tasks
+You will prompt a model to generate more prompts. Evaluate them, possibly alter the good ones. And repeat
+Use case: scaling content creation, marketing and brand voice, choose the best
+2 steps:
+ 1st step: involves a large language model (as an inference model) that is given output demonstrations to generate instruction candidates for a task
+2nd step: target model executes the instructions, the most appropriate instruction is selected based on computed evaluation scores.
+How many AI Agents needed?
+
+
+2-3
+Inference Model: to be creative and generate many different possible instructions (prompts) to accomplish a task
+Target Model: executes the various prompts created by the Inference Model so its performance can be measured
+
+Automatic Prompt Engineering - Configuration
+Temperature
+Top P
+Top K
+
+Inference Model
+(The Idea Generator)
+High (0.7 to 1.2)
+High (0.9 to 1.0)
+Generally not used when Top P is active.
+If used, set it to high value
+Target Model
+(The Worker)
+Low (0.0 to 0.3)
+Low or no used
+Generally not used
+ for the APE technique, configure the two models with almost opposite settings to achieve the best results
+
+Automatic Prompt Engineering - Example
+Inference Model
+Target Model
+Receipt Writer
+Robot Chef
+Various possible recipes
+Cheesy flatbread
+
+tomato pie
+
+pepperoni pizza
+Make a pizza using each provided recipes
+
+Automatic Prompt Engineering - Example
+
+Hallucination and Prompting Techniques
+Hallucination is when a model generates false, nonsensical, or completely fabricated information and presents it as if it were a fact. 
+The AI isn't "lying" in the human sense, as it has no intent. It's simply generating a statistically plausible but incorrect output based on the patterns, biases, and gaps in its training data.
+How to spot a hallucination?
+### Golden rule: Trust but verify
+Shift your mindset from accepting an answer to investigating a claim.
+Cross-reference with multiple sources
+Interrogate the AI Itself
+Use Logic and Common Sense
+Do quick web-check
+Ask anther AI
+Ask for source, even though AI can fake URL or invent a book title
+Challenge the answer: “Are you sure? I read somewhere that…
+Ask for more details
+Internal consistency
+Too good / bad to be true
+
+Hallucination and Prompting Techniques
+Techniques that effectively reduce AI hallucinations
+Few-shot Prompting
+Chain-of-Thought Prompting
+Specify Output Format
+Demand Sources and Honesty
+by giving the model a few high-quality examples of the exact type of input and output you want before asking your actual question
+by instructing the model to "think step-by-step" or explain its reasoning process before giving the final answer
+by defining the output structure, such as asking for a JSON object or a table, can constrain the model and make it less likely to generate free-form, narrative hallucinations
+by Instructing the model to back up its claims and  admit when it doesn't know something
+Contextual / Role Prompting
+by providing the necessary information directly in the prompt and ask it to work only with that context, instead of asking the model a question from its own memory
+
+End of session 1

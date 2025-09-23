@@ -1,0 +1,271 @@
+RAG_
+
+AN INTRODUCTION TO RETRIEVAL-AUGMENTED 
+GENERATION
+
+THE PLAN
+FOR TODAY
+Learn how to provide custom knowledge to LLMs by storing and retrieving external documents when responding to user queries.
+
+
+What is RAG?Why do we need RAG?
+
+What is included in a RAG workflow?Deep dive into RAG setup.
+
+3.  What actually happens in a RAG workflow? 
+ 
+
+4.	When to use RAG? When to use long prompt?
+
+
+
+RETRIEVAL
+WHAT IS RAG?
+AUGMENTED
+GENERATION
+→ The model finds relevant documents (context) and LLM generates response using retrieved documents.
+
+WHY DO WE NEED RAG?
+LLMs are not aware of:
+Internal company documents
+Latest policies, processes
+New products
+Sensitive or proprietary knowledge
+Even if you “prompt” the LLM with background info, you quickly hit token limits.
+
+
+
+WHAT’S INCLUDED IN A 
+RAG WORKFLOW?
+A RAG workflow consists of two core components:
+A vector database that stores information.
+The retrieval and generative model that produces the final response.
+
+Reveal something surprising about yourself, like a unique skill or obscure personal trivia. Remember: 
+one of these has to be a lie! 
+
+Component #1
+Reveal something surprising about yourself, like a unique skill or obscure personal trivia. Remember: 
+one of these has to be a lie! 
+
+Component #2
+Knowledge/ Context Preparation (Vector Database) -  This component is responsible for preparing and storing your knowledge so it can be retrieved later.
+In this setup, we need to:
+Split text into chunks/ Break documents into smaller pieces
+Generate embeddings for each chunk
+Store the embeddings in a vector database 
+Context Retrieval & Language Model Response - This component takes the retrieved information and creates the final answer.
+
+
+Break text into chunks
+Generate embedding & store in a vector database
+
+COMPONENT #1:
+KNOWLEDGE PREPARATION
+(VECTOR DATABASE) 
+
+HOW DO WE CHUNK TEXT?
+WHY DO WE NEED TO BREAK INTO CHUNKS?
+Split long documents into small sections (called "chunks")
+Each chunk should:
+Be large enough to provide context
+Be small enough to fit easily in the context window
+Typically 300–500 words or ~500–1000 tokens
+Often, overlap is added between chunks (e.g. 20%) to avoid splitting important ideas across chunks.
+
+LLMs have token limits, you can’t fit entire documents into one prompt.
+Retrieval works better on smaller, focused pieces of text.
+It helps improving retrieval precision and speed.
+
+BREAK TEXT INTO CHUNKS
+
+Large chunks dilute semantic meaning: If you embed a whole book, the resulting vector will be a vague “average” of all its topics. Smaller chunks capture specific concepts, which makes retrieval more accurate.
+Context window will contains: system prompt/ instruction, user query/ question, retrieved chunks, (optional: formatting guidance). So when the chunk is small enough, it leaves more room for the model to compare them, reason over them, and still have space left to generate an answer.
+
+Cities around the world are facing growing challenges due to climate change, including rising sea levels, extreme heat, and increased flooding. Urban planners are now rethinking how cities are designed to make them more resilient. This includes building green infrastructure like parks and wetlands that absorb water, adjusting building codes to withstand heat waves, and integrating early warning systems for natural disasters. However, implementing these solutions can be expensive and politically challenging, particularly in rapidly growing cities in developing countries.
+
+TRY CHUNKING THIS PARAGRAPH
+
+CHUNK 1:
+PROBLEM
+Cities around the world are facing growing challenges due to climate change, including rising sea levels, extreme heat, and increased flooding. Urban planners are now rethinking how cities are designed to make them more resilient.
+CHUNK 2:
+SOLUTION
+This includes building green infrastructure like parks and wetlands that absorb water, adjusting building codes to withstand heat waves, and integrating early warning systems for natural disasters.
+CHUNK 3:
+LIMITATION
+However, implementing these solutions can be expensive and politically challenging, particularly in rapidly growing cities in developing countries.
+SOLUTION
+
+HOW DO WE GENERATE EMBEDDINGS?
+WHY DO WE NEED EMBEDDINGS (VECTOR)?
+We can use pre-trained embedding models that are built in our LLM.
+What embedding models do:
+Take the text chunk results in Step 1.
+Convert each chunk into a vector of numbers (embedding).
+These embeddings will allow the agent to find chunks that are similar to the user’s query. 
+
+TURN CHUNKS INTO EMBEDDINGS
+
+Because LLMs can’t search “text” efficiently  but they can compare vectors.
+An embedding “encodes” the meaning of the text into a vector.
+Model
+Embedding Size
+Notes
+OpenAI text-embedding-3-small
+1536
+high quality
+BGE (BAAI)
+768 / 1024
+open-source
+Gemini models/embedding-001
+768
+Embedding size means #dimensions → Bigger size = often captures more detail, but takes more space
+
+
+RECAP:
+KNOWLEDGE/ CONTEXT PREPARATION
+(VECTOR DATABASE) 
+
+Documents 
+input
+Break documents
+Text chunks
+Tokenized text chunks
+Embedding into vectors
+Store embeddings in vector database
+Step #1: Break text into chunks
+Step #2 & #3: Embedding & storing vector
+
+COMPONENT #2:
+CONTEXT RETRIEVAL
+& LANGUAGE MODEL
+RESPONSE
+
+WHAT’S HAPPENING IN THIS PROCESS?
+GOAL:
+User input a question → generate embedding for the question.E.g. “How much time does it save DO when soft-hold bot is enabled?”→ embedding question:  “response": [0.034620266, -0.050117042, -0.037570003,..]
+Compare this user question embedding to the stored document chunks.
+Retrieve top-matching chunks.
+Provide these chunks as “context" to the LLM (LLM input) → generate response.E.g. “The soft-hold bot saves DO about 50% of the time compared to manual processing—reducing each task from around 10 minutes to about 3-5 minutes, and overall could save 3-4 hours per week just from reduced context switching.”
+
+
+USE CONTEXT TO PRODUCE THE RESPONSE
+
+
+
+
+
+Match the user’s question with the most relevant content stored in the database.
+
+DOT PRODUCT
+HOW RAG 
+COMPARES VECTORS?
+
+COSINE SIMILARITY
+COSINE SIMILARITY
+a
+b
+α
+sim(a,b) = (a.b)/(|a|.|b|)
+Measures similarity based on direction, ignore the arrow's length.
+Care about which direction they point. If they both point the same way → they’re similar
+The cosine similarity value ranges from -1 to 1
+1 = vectors point in exactly the same direction →  very similar
+0 = vectors are 90° apart →  unrelated
+-1 = vectors point in opposite directions →  completely opposite
+Cosine similarity focus more on the meaning.
+
+DOT PRODUCT
+HOW RAG 
+COMPARES VECTORS?
+
+COSINE SIMILARITY
+WHY NOT DOT PRODUCT?
+COSINE SIMILARITY
+a
+b
+α
+a.b = |a||b|cosα 
+Cares about how long the arrows are and how close they are. 
+If two arrows are long and pointing in the same direction → bigger score.
+But if one is shorter, even if it points the same way → smaller score
+Dot product favors longer vectors (bigger numbers), even if they’re not more relevant.
+|a|cosα
+In RAG, short but highly relevant chunks (short vectors) would be unfairly penalized by dot product, which favors longer vectors, even if those longer chunks are less relevant.
+
+RECAP:
+CONTEXT RETRIEVAL 
+& LANGUAGE MODEL RESPONSE
+
+Question/ request
+input
+Filter keywords for attention
+
+Tokenize & embed question
+
+Compare question vector with database vector 
+
+Retrieve top matching chunks
+Generate 
+answer
+Combine chunks & question
+Language 
+model
+Form 
+prompt
+AI agent
+Tool call
+
+Tool call
+
+DOES RAG ALWAYS USE 
+THE DATABASE?
+
+
+BY DEFAULT,
+RAG AGENT         SEARCHES IN 
+THE VECTOR DATABASE ONLY
+!
+YES:
+BUT…
+
+BUT… WE CAN BUILD A 
+FALLBACK MECHANISM
+BUT
+FALLBACK MECHANISM
+When the primary method fails or returns no results, the system “falls back" to an alternative approach.
+
+RAG search
+Retrieve matching chunks
+Generate answer
+No matching chunks found
+Fallback triggered
+External search tool
+Generate 
+answer
+Normal RAG
+Fallback RAG
+
+RAG VS LONG PROMPT
+Add tag
+RAG
+LONG PROMPT
+Store knowledge in a database to retrieve when needed
+Fetch all data/ information into one single prompt
+Good for large, changing contentE.g. meeting notes, product documents, data reports
+Good for small, fixed contentE.g. rules to extract client’s digitization information, rules to soft-hold 
+Prompt is short and efficient
+Prompt is lengthy, get slower as it grows
+The context for the model is enriched when new documents added 
+Need to manually update prompt to give more context when content changes
+Key takeaway: Use RAG when your knowledge is big or always changing, use long prompts for small, static content.
+
+LINKS AND RESOURCES
+Sample RAG workflow
+SQL to create Supabase table
+SQL to set up cosine similarity calculation
+Splitting concepts
+
+THANK
+YOU!

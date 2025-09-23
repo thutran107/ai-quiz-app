@@ -1,0 +1,223 @@
+How LLMs Work
+PART ONE - DC Class
+AI Foundations
+
+Objective
+Learn how LLMs work
+Learn terminology and concepts
+Use this foundation to build upon your team’s knowledge when researching
+Use this knowledge to consult clients and build AI agents effectively
+
+How does the LLM know how to respond?
+ChatGPT
+Text Input
+Output Response
+
+What does GPT stand for?
+
+Generative
+Generate new text
+Pre-trained 
+How the model learned from massive text data set from the Internet
+Model can be fine-tuned with additional training
+Transformer
+Machine learning predictions 
+> Deep Learning multi-layer neural networks 
+> LLM Transformer architecture
+
+Generative
+
+LLM generates one token at a time and repeats until done
+ChatGPT
+Text Input
+Output Response
+
+What would the model need to predict the next token? 
+Vocabulary of all words
+All possible meanings of every word
+A massive corpus of writing samples to use as reference in any context
+How words have different meanings depending on context (e.g. power bank vs financial bank vs river bank)
+
+
+And then how does the model generate the next token? 
+Probability of next token depends on what came before.
+“The cat sat on the”  
+What’s the probability that the following words will be the next token?
+moon
+jump
+ground
+mat
+This property of predicting the next values based on past values is called auto-regressive.
+Keep appending each new token, factor in the new context to predict the next token, and repeating until the response is complete.
+Key takeaway: Probability means math
+
+LLM runs on math 
+LLM is a probability engine that is predicting the next token over and over again.
+
+Any Questions?
+What is auto-regressive?
+Probability Engine
+Text Input
+Output Response
+
+Pre-trained
+
+How the model knows the likelihood of the next token? 
+I
+Internet data containing massive amount of writing samples
+Parameters tunable (ie. learnable) during training
+
+Premise of Deep Learning
+A flexible framework (not hard-coded) with tunable parameters that have been trained on test sample data
+
+First Forward Pass initialized with Random Weights
+Tunable parameters 
+(aka weights and biases)
+The cat sat on the
+moon
+Compared with Internet data: 
+“The cat sat on the mat”
+
+Measure the difference between the model’s prediction (“moon”) and the correct answer (“mat”): Loss Function
+The model’s first prediction
+
+Backwards Pass: Backpropagation
+The model learns by going backwards through the machine and adjusting (tuning) the weights to account for the loss gradients so that next time the prediction is more accurate: Backpropagation
+This is the essence of how the machine learns to make accurate predictions using training data. 
+
+
+Recap
+Set the parameters (aka weights and biases) as random.
+Feed Internet training data into the machine.
+Let the machine make a prediction.
+Calculate the loss function between the prediction with the correct answer.
+Run backpropagation backwards through the machine to adjust the parameters to make better predictions next time.
+Repeat this cycle billions of times with massive data sets.
+After all the training is done, then the weights are fixed.
+Any questions so far?
+
+Math: 
+Matrix-Vector Multiplication
+
+Deep Learning is based on Math
+The models run on Linear Algebra math–specifically, matrix-vector dot product multiplication.
+
+Layers of Math to convert Input to Output
+Input is converted into a multi-dimensional array of numbers (a tensor)
+Layers of matrix multiplication lead from the input to the output.
+
+Multiplication of weights transforms input into meaning
+The multiplication of input versus parameter matrices maps the input data to meaningful space and leads to the output that makes sense
+The tunable parameters are called weights (and biases).
+
+Parameters packaged in Matrix-Vector Product
+The parameters are computed as weighted sums in a matrix-vector product.
+
+Computing Matrix-Vector Dot Product
+
+Result of Matrix-Vector Dot product
+
+Matrices transform Vectors
+Think of Matrices of Tunable Parameters that transform Input Data Vectors
+
+Recap: Inside the model is mostly just multiplication
+All the transformation layers are just multiplying weight matrices with data vectors.
+
+Any Questions? 
+What is the core math operation?
+
+Transformer
+
+What is being transformed? 
+Convert input text into data vectors
+Transform the data vectors to incorporate meaning
+Make a prediction
+Input Text
+Output Response
+Keep looping until response is complete
+A Probability Engine needs to do math on numbers.
+So we need to first convert the input text into a set of numbers.
+
+LLM
+Architecture
+Link to Diagram
+Decoder only
+Memorize and understand this:
+Familiarize yourself with Excalidraw.
+
+Source
+New LLMs are variations of the same baseline frameworks.
+
+Tokenization
+Play around with Tiktokenizer
+
+Embedding
+
+Embedding
+Each token is indexed into an embedding matrix
+
+
+Tokens are converted into Vectors
+Input sequence broken up into chunks called tokens, which are converted into vectors.
+Index Lookup
+
+Maps tokens to corresponding vector (via index lookup)
+The embedding matrix contains all vectors for every possible token.
+
+This is the starting point.
+
+No multiplication needed yet, i.e. no transformation
+
+Number of weights in embedding matrix = 617 million
+GPT-3
+Dimensions
+
+Think of Embedding as mapping words to meaning
+Words become vectors in a high-dimensional representation of meaning
+In GPT3, there are 12,288 dimensions
+
+Consistent Direction captures Relationships
+The yellow direction indicates a semantic relationship between two vectors in the embedding space–i.e. masculine-to-feminine gender information as its own vector.
+
+Vector Arithmetic Transfers Meaning
+Vector math can translate to meaning.
+Sushi + Germany - Japan = Bratwurst
+Sushi + Vietnam - Japan = ?
+
+Alignment between vectors
+Dot Product of two vectors measure how well they align.
+
+Computing dot product
+Multiply each corresponding value to one another and add up the results as weighted sums.
+
+Dot product alignment
+Positive: 
+pointed in similar direction
+
+Zero: 
+perpendicular
+
+Negative: 
+pointed in opposite direction
+
+Recap: Embedding Terminology
+
+Convert input text into data vectors
+Transform the data vectors to incorporate meaning
+Make a prediction
+Input Text
+Output Response
+Keep looping until response is complete
+Tokenization +
+Embedding
+What we covered today 
+Topics to cover next Time
+
+Sources
+ChatGPT
+3Blue1Brown Neural Networks Course
+Donato Capitella LLM Chronicles #2.1
+Lucidate Neural Networks
+Andrej Karpathy Deep Dive into LLMs like ChatGPT
+Andrej Karpathy Intro to Large Language Models
+Stanford CS229 Machine Learning: Building Large Language Models

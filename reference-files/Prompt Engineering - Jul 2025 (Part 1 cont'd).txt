@@ -1,0 +1,177 @@
+PROMPT ENGINEERING
+(Part 1: Concepts)
+AI FOUNDATION CLASS 1
+Mai Anh Vu 
+
+Recap Last Session
+01
+Introduction to Prompt Engineering
+02
+LLM Configurations
+03
+Prompt Techniques
+Max token
+Top-P
+Temperature
+Frequency Penalty
+Top-K
+Presence Penalty
+Zero shot & few shot
+System, contextual and role 
+Step-back prompting
+Automatic prompt engineer
+
+
+We will continue with the last 4 prompt techniques:
+Chain of Thought
+Self-Consistency
+Tree of Thought
+ReAct
+
+Today Session
+
+Chain of Thought (CoT)
+Source: Chain-of-Thought Prompting Elicits Reasoning in Large Language Models from Arxiv
+CoT: the technique that asks the AI model to 
+think step-by-step before answering and provide the reasoning process in the output. 
+CoT use the greedy decoding to choose the answer. 
+
+Use for: 
+🧮 Math and Counting Problems, Puzzle thinking
+✅ Complex Decision-Making in business cases: customer support, data analysis, email writing, regulation compliance & legal analysis, etc
+ 
+3 types of CoTs: 
+Standard CoT / Few-shot CoT
+Zero shot CoT
+Automatic CoT (Advanced technique)
+
+
+
+
+
+
+
+
+
+
+
+
+
+Zero-shot CoT & Few-shot CoT 
+Zero shot CoT Example
+Few shot CoT Example
+LLM
+LLM 
+
+Zero shot CoT
+Standard CoT/ Few-shot CoT
+Input & Output
+Input: A question + a simple reasoning prompt like “Let’s think step by step.”
+Output: in most case, the model only extracts the answer 
+Input: A few example Q&A pairs 
+Output: A similar step-by-step answer, following the example format.
+How it works
+2 steps process:
+Reasoning Extraction -> Answer Extraction 
+Take the examples from the input (Q&A pairs) 
+-> Learn the pattern -> Sequential Questioning
+Best use for
+Basic customer queries, quick reasoning tasks
+Code generation, Regulatory analysis, Detailed strategy, Domain-specific QA
+Zero-shot CoT & Few-shot CoT 
+Zero-shot cot: extract the reasoning step by step via the Trigger sentence “ let's think step by step" then the model feed those reasoning answer into the hidden prompt to extract exact answer only. 
+
+For Reference
+
+Self-Consistency 
+Self-Consistency: the another technique that aims to replace the greedy decoding used in CoT 
+
+Business use cases: 
+HR - Employee performance classification 
+CS - Email classification and prioritization
+Legal - Policy interpretation 
+and risk assessment
+
+2 types of Self-Consistency:
+Standard Self-Consistency
+Universal Self-Consistency 
+(Advanced technique)
+
+❌ Limitations: 
+Take more time to compute 
+Not work well for creative generation or brainstorming  
+
+
+Start with CoT: Use prompts that make the AI think step by step.
+Sample multiple answers: Instead of one answer, generate many different reasoning paths.
+Majority vote: Look at all the final answers and pick the one that shows up the most.
+Real use case can apply: in HR (candidate assessment to decide fit or not based on resume or cover letter?) 
+Good for tasks related to math, common-sense reasoning, and for fine-tuning the model
+
+
+Self-Consistency 
+
+How this works: 
+
+Start with the CoT prompt 
+
+Sampling multiple answers (via temperature high from 0.7 - 1)
+
+Choose the majority answers
+
+
+
+Start with CoT: Use prompts that make the AI think step by step.
+Sample multiple answers: Instead of one answer, generate many different reasoning paths.
+Majority vote: Look at all the final answers and pick the one that shows up the most.
+
+
+Self-Consistency 
+For Reference
+Example prompt for Self-consistency 
+How to setup in n8n: Diagram
+Start with CoT: Use prompts that make the AI think step by step.
+Sample multiple answers: Instead of one answer, generate many different reasoning paths.
+Majority vote: Look at all the final answers and pick the one that shows up the most.
+
+
+Tree of Thought (ToT)
+ToT: the method that asks the model to think of all the possible options at each step then reasoning whether to look ahead or backtrack to make more optimal decisions.
+
+Best use cases: 
+Code generation (multiple implementations)
+Strategic planning (exploring options)
+Marketing (campaign strategy development)
+Finance (financial analysis)
+
+Tree of Thought (ToT)
+Source: What is tree of thoughts prompting from IBM
+For Reference
+
+Tree of Thought (ToT)
+
+ReAct (Reason & Act)
+ReAct stands for Reasoning and Acting.
+It combines chain-of-thought reasoning with tool use (like search, calculator, or API calls).
+The model thinks through steps and acts using external tools, then continues reasoning based on results.
+
+Use ReAct technique for:
+Customer Support with live data retrieval 
+Code debugging agent
+
+
+
+ReAct (Reason & Act)
+How it works
+Thought: LLM reasons step-by-step.
+Action: LLM chooses a tool (search, calc, etc.).
+Observation: LLM reads the results.
+Repeat: Loop between reasoning & acting (if needed)
+Final Answer: LLM gives a grounded output.
+
+For Reference
+
+For Reference
+
+END OF 
+PART 1-CONCEPTS
