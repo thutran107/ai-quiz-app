@@ -365,8 +365,8 @@ export default function Home() {
                         <div className="w-16 h-16 bg-purple-200 rounded-full flex items-center justify-center mx-auto mb-3">
                           <span className="text-2xl">📄</span>
                         </div>
-                        <h4 className="font-bold text-purple-800 mb-2">Upload TXT File</h4>
-                        <p className="text-purple-600 text-sm">Plain text documents up to 10MB</p>
+                        <h4 className="font-bold text-purple-800 mb-2">Upload TXT or PDF</h4>
+                        <p className="text-purple-600 text-sm">Text or PDF documents up to 10MB</p>
                       </div>
                       <div className="text-center">
                         <div className="w-16 h-16 bg-pink-200 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -387,7 +387,7 @@ export default function Home() {
                     <div className="border-2 border-dashed border-purple-300 rounded-xl p-8 text-center hover:border-purple-400 transition-colors duration-200">
                       <input
                         type="file"
-                        accept=".txt"
+                        accept=".txt,.pdf"
                         onChange={(e) => e.target.files && handleFileUpload(e.target.files[0])}
                         className="hidden"
                         id="file-upload-tab"
@@ -402,9 +402,9 @@ export default function Home() {
                           </svg>
                         </div>
                         <h4 className="text-xl font-bold text-purple-800 mb-2">Choose File to Upload</h4>
-                        <p className="text-purple-600 mb-4">Click here to select your TXT file</p>
+                        <p className="text-purple-600 mb-4">Click here to select your TXT or PDF file</p>
                         <div className="inline-block gradient-accent text-white font-bold py-3 px-8 rounded-xl custom-shadow-lg transform hover:scale-105 transition-all duration-200">
-                          📄 Select TXT File
+                          📄 Select File (TXT/PDF)
                         </div>
                       </label>
                     </div>

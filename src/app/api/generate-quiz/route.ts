@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { QuizQuestion } from '@/types';
+import { PDFParse } from 'pdf-parse';
 
 async function extractTextFromFile(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
 
-  // Handle PDF files - for now, let's require TXT files only
+  // Handle PDF files
   if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-    throw new Error('PDF files are not currently supported. Please convert to TXT format and try again.');
+    try {
+      const pdfParser = new PDFParse({
+        data: new Uint8Array(buffer)
+      });
+      const result = await pdfParser.getText();
+      await pdfParser.destroy();
+      return result.text;
+    } catch (error) {
+      console.error('Error parsing PDF:', error);
+      throw new Error('Failed to parse PDF file. Please ensure the PDF contains readable text.');
+    }
   }
 
   // Handle plain text files
@@ -17,7 +28,7 @@ async function extractTextFromFile(file: File): Promise<string> {
 
   // For other file types, try to decode as text
   if (file.name.endsWith('.docx') || file.name.endsWith('.pptx')) {
-    throw new Error('DOCX and PPTX files are not currently supported. Please convert to TXT format and try again.');
+    throw new Error('DOCX and PPTX files are not currently supported. Please convert to TXT or PDF format and try again.');
   }
 
   // Default: try to decode as text
