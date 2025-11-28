@@ -390,7 +390,7 @@ function QuizPageContent() {
                 <div>
                   <input
                     type="file"
-                    accept=".txt"
+                    accept=".txt,.pdf"
                     onChange={(e) => e.target.files && handleFileUpload(e.target.files[0])}
                     className="hidden"
                     id="file-upload"
@@ -399,10 +399,10 @@ function QuizPageContent() {
                     htmlFor="file-upload"
                     className="gradient-accent text-white heading-secondary py-4 px-8 rounded-xl cursor-pointer inline-block w-full shadow-card-hover interactive-scale transition-smooth"
                   >
-                    📄 Upload TXT File
+                    📄 Upload TXT/PDF File
                   </label>
                   <p className="text-sm text-accent-600 mt-4">
-                    Currently supports TXT files up to 10MB
+                    Currently supports TXT and PDF files up to 10MB
                   </p>
                 </div>
               )}

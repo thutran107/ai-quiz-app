@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { QuizQuestion } from '@/types';
-import { PDFParse } from 'pdf-parse';
+import PDFParser from 'pdf2json';
 
 async function extractTextFromFile(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
@@ -9,15 +9,52 @@ async function extractTextFromFile(file: File): Promise<string> {
   // Handle PDF files
   if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
     try {
-      const pdfParser = new PDFParse({
-        data: new Uint8Array(buffer)
+      const pdfParser = new PDFParser();
+
+      return new Promise<string>((resolve, reject) => {
+        pdfParser.on('pdfParser_dataError', (errData: Error | { parserError: Error }) => {
+          const errorMessage = errData instanceof Error ? errData.message : errData.parserError.message;
+          console.error('PDF parsing error:', errorMessage);
+          reject(new Error(errorMessage));
+        });
+
+        pdfParser.on('pdfParser_dataReady', (pdfData) => {
+          try {
+            // Extract text from all pages
+            let text = '';
+            if (pdfData.Pages) {
+              for (const page of pdfData.Pages) {
+                if (page.Texts) {
+                  for (const textItem of page.Texts) {
+                    for (const run of textItem.R) {
+                      if (run.T) {
+                        // Decode URI-encoded text, with fallback for malformed URIs
+                        try {
+                          text += decodeURIComponent(run.T) + ' ';
+                        } catch (e) {
+                          // If decoding fails, use the raw text
+                          text += run.T.replace(/%20/g, ' ') + ' ';
+                        }
+                      }
+                    }
+                  }
+                  text += '\n';
+                }
+              }
+            }
+            resolve(text.trim());
+          } catch (error) {
+            console.error('Error processing PDF data:', error);
+            reject(error);
+          }
+        });
+
+        // Parse the buffer
+        pdfParser.parseBuffer(Buffer.from(buffer));
       });
-      const result = await pdfParser.getText();
-      await pdfParser.destroy();
-      return result.text;
     } catch (error) {
       console.error('Error parsing PDF:', error);
-      throw new Error('Failed to parse PDF file. Please ensure the PDF contains readable text.');
+      throw new Error(`Failed to parse PDF file: ${(error as Error).message}`);
     }
   }
 
