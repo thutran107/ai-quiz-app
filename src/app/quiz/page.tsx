@@ -68,7 +68,8 @@ function QuizPageContent() {
       llm: 'Large Language Models',
       promptEngineering: 'Prompt Engineering',
       rag: 'RAG Systems',
-      memory: 'AI Memory Systems'
+      memory: 'AI Memory Systems',
+      agentArchitecture: 'Agent Architecture'
     };
     return topicNames[topicKey] || topicKey;
   };

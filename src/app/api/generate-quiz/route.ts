@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { QuizQuestion } from '@/types';
-import PDFParser from 'pdf2json';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const PDFParser = require('pdf2json');
 
 async function extractTextFromFile(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
 
   // Handle PDF files
   if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+    console.log('Processing PDF file:', file.name);
     try {
       const pdfParser = new PDFParser();
+      console.log('PDF parser initialized');
 
       return new Promise<string>((resolve, reject) => {
         pdfParser.on('pdfParser_dataError', (errData: Error | { parserError: Error }) => {
@@ -18,7 +21,8 @@ async function extractTextFromFile(file: File): Promise<string> {
           reject(new Error(errorMessage));
         });
 
-        pdfParser.on('pdfParser_dataReady', (pdfData) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        pdfParser.on('pdfParser_dataReady', (pdfData: any) => {
           try {
             // Extract text from all pages
             let text = '';
@@ -31,7 +35,7 @@ async function extractTextFromFile(file: File): Promise<string> {
                         // Decode URI-encoded text, with fallback for malformed URIs
                         try {
                           text += decodeURIComponent(run.T) + ' ';
-                        } catch (e) {
+                        } catch {
                           // If decoding fails, use the raw text
                           text += run.T.replace(/%20/g, ' ') + ' ';
                         }

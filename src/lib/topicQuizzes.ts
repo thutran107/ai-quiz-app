@@ -299,5 +299,101 @@ export const topicQuizzes = {
       correct_answer: "Working memory operates within context window constraints",
       explanation: "Working memory in AI must operate within the model's context window limitations, requiring efficient strategies to maintain relevant information within these bounds."
     }
+  ] as QuizQuestion[],
+
+  agentArchitecture: [
+    // Multiple Choice Questions
+    {
+      question_id: "agent_mc_1",
+      question_text: "What are the four main components of agent architecture?",
+      options: ["Input, Output, Processing, Storage", "Perception, Reasoning, Memory, Action", "Collection, Analysis, Decision, Execution", "Interface, Logic, Database, API"],
+      correct_answer: "Perception, Reasoning, Memory, Action",
+      explanation: "Agent architecture consists of four interconnected components: Perception (capturing data), Reasoning & Planning (decision-making), Memory (storing experiences), and Action (executing tasks)."
+    },
+    {
+      question_id: "agent_mc_2",
+      question_text: "What distinguishes agents from simple LLMs?",
+      options: ["Agents are faster", "Agents have goal-pursuit, memory, and explicit reasoning", "Agents use more tokens", "Agents are cheaper to run"],
+      correct_answer: "Agents have goal-pursuit, memory, and explicit reasoning",
+      explanation: "Unlike LLMs that simply predict next tokens, agents autonomously pursue goals with episodic and semantic memory, explicit reasoning (CoT, ToT, Reflection), and dynamic tool use."
+    },
+    {
+      question_id: "agent_mc_3",
+      question_text: "Which reasoning framework is best for complex tasks requiring foresight?",
+      options: ["ReAct", "Plan-and-Execute", "DPPM", "Chain-of-Thought"],
+      correct_answer: "Plan-and-Execute",
+      explanation: "Plan-and-Execute uses Sequential Decomposition to create upfront plans for complex tasks requiring foresight, unlike ReAct's interleaved approach for simpler dynamic tasks."
+    },
+    {
+      question_id: "agent_mc_4",
+      question_text: "What is the primary advantage of multimodal perception over text-based perception?",
+      options: ["Lower cost", "Ability to interact with visual interfaces and GUIs", "Faster processing", "Less complexity"],
+      correct_answer: "Ability to interact with visual interfaces and GUIs",
+      explanation: "Multimodal perception using VLM/MM-LLM enables agents to interact with visual interfaces and GUIs, enhanced by Set-of-Mark operations and Accessibility Trees for precise GUI automation."
+    },
+    {
+      question_id: "agent_mc_5",
+      question_text: "Which memory architecture provides the most sophisticated multi-layered approach?",
+      options: ["Context-window based", "Working memory buffers", "Vector stores like Zep", "Memory stack like Mem0"],
+      correct_answer: "Memory stack like Mem0",
+      explanation: "Mem0 provides the most sophisticated memory stack with multi-layered architecture including extraction, importance scoring, conflict resolution, and intelligent memory management across user, session, and agent levels."
+    },
+    // Reasoning Questions
+    {
+      question_id: "agent_reason_1",
+      question_text: "How do agents differ from workflows in handling tasks?",
+      options: ["No difference", "Agents adapt dynamically while workflows follow fixed sequences", "Workflows are more intelligent", "Agents are just faster workflows"],
+      correct_answer: "Agents adapt dynamically while workflows follow fixed sequences",
+      explanation: "Agents adapt their strategies based on environmental feedback with dynamic tool use and reasoning, while workflows execute predetermined fixed sequences with limited adaptability."
+    },
+    {
+      question_id: "agent_reason_2",
+      question_text: "What are the three main types of perception approaches in agent architecture?",
+      options: ["Fast, medium, slow", "Text-based, tool-augmented, multimodal", "Visual, audio, tactile", "Simple, complex, hybrid"],
+      correct_answer: "Text-based, tool-augmented, multimodal",
+      explanation: "The three perception approaches are: text-based (chat interfaces, low cost), tool-augmented (APIs, databases, sensors), and multimodal (VLM/MM-LLM for GUI automation with Set-of-Mark and Accessibility Trees)."
+    },
+    {
+      question_id: "agent_reason_3",
+      question_text: "Why is the DPPM reasoning framework useful?",
+      options: ["It's the simplest", "It enables parallel execution and avoids cascading errors", "It's the cheapest", "It requires no planning"],
+      correct_answer: "It enables parallel execution and avoids cascading errors",
+      explanation: "DPPM (Decompose-Parallel Planning-Merge) enables parallel execution of independent subtasks and avoids cascading errors by allowing independent processing before merging results."
+    },
+    {
+      question_id: "agent_reason_4",
+      question_text: "What role does reflection play in agent reasoning?",
+      options: ["It slows down processing", "It enables error recovery and improved decision-making", "It replaces all other reasoning", "It only works for simple tasks"],
+      correct_answer: "It enables error recovery and improved decision-making",
+      explanation: "Reflection enables agents to learn from mistakes through after-execution analysis and anticipatory 'Devil's Advocate' evaluation, improving decision-making and error recovery in critical tasks."
+    },
+    {
+      question_id: "agent_reason_5",
+      question_text: "How does memory progression typically work in agent architecture?",
+      options: ["Random selection", "Progressive sophistication from context-window to memory stacks", "Always start with the most complex", "Memory type doesn't matter"],
+      correct_answer: "Progressive sophistication from context-window to memory stacks",
+      explanation: "Memory implementation typically progresses from simple context-window based → working buffers → external stores (Redis) → vector stores (Zep) → reflective loops (MemGPT) → memory stacks (Mem0), increasing in sophistication and capability."
+    },
+    {
+      question_id: "agent_reason_6",
+      question_text: "What is the purpose of the $fromAI() function in n8n agent actions?",
+      options: ["To train models", "To enable dynamic parameter values from LLM outputs", "To store data", "To generate random values"],
+      correct_answer: "To enable dynamic parameter values from LLM outputs",
+      explanation: "The $fromAI() function in n8n enables structured tool-calling by allowing tool parameters to receive dynamic values directly from the LLM's reasoning and decision-making process."
+    },
+    {
+      question_id: "agent_reason_7",
+      question_text: "What are the four types of information stored in agent memory?",
+      options: ["Files, images, code, data", "Experiences, procedures, knowledge, user information", "Past, present, future, conditional", "Input, output, process, error"],
+      correct_answer: "Experiences, procedures, knowledge, user information",
+      explanation: "Agent memory stores four information types: Experiences (successes/failures), Procedures (reusable workflows), Knowledge (external facts), and User information (preferences, background, activities)."
+    },
+    {
+      question_id: "agent_reason_8",
+      question_text: "When should you choose ReAct over Plan-and-Execute reasoning?",
+      options: ["Always use ReAct", "For simple dynamic tasks with lower latency needs", "For complex multi-step planning", "When transparency isn't important"],
+      correct_answer: "For simple dynamic tasks with lower latency needs",
+      explanation: "ReAct (interleaved decomposition) is ideal for simple dynamic tasks with lower latency requirements and adaptability to real-time feedback, while Plan-and-Execute is better for complex tasks requiring upfront planning."
+    }
   ] as QuizQuestion[]
 };

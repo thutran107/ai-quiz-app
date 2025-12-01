@@ -9,7 +9,7 @@ A comprehensive educational platform that empowers teams with AI knowledge throu
 - **Prompt Engineering**: Master advanced techniques including Chain of Thought, Self-Consistency, and ReAct
 - **RAG Systems**: Comprehensive guide to Retrieval-Augmented Generation with vector databases and similarity search
 - **Memory Systems**: Explore AI agent memory types, management, and retrieval mechanisms
-- **Knowledge Graphs**: Learn graph-based reasoning, GraphRAG implementation, and semantic AI applications
+- **Agent Architecture**: Master autonomous AI agents with perception, reasoning, memory, and action components
 
 ### 🎯 Assessment & Testing
 - **Sample Quizzes**: Expertly crafted assessments for each AI topic with detailed explanations
@@ -99,7 +99,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **AI Generation**: Get 5-10 personalized questions based on your content
 
 ### Sample Quizzes
-- **Topic-Specific**: Take specialized quizzes for LLM, Prompt Engineering, RAG, Memory, and Knowledge Graphs
+- **Topic-Specific**: Take specialized quizzes for LLM, Prompt Engineering, RAG, Memory, and Agent Architecture
 - **Instant Feedback**: Get immediate results with detailed explanations
 - **Learning Insights**: Review correct answers and expand your understanding
 
@@ -116,16 +116,17 @@ src/
 │   └── page.tsx              # Main page with Library Hub and quiz generation
 ├── lib/
 │   ├── data.ts              # AI terms, quiz questions, and educational content
-│   ├── topicKnowledge.ts    # Comprehensive topic-specific educational content
+│   ├── topicKnowledge.ts    # Comprehensive topic-specific educational content (what/why/how)
+│   ├── topicQuizzes.ts      # Topic-specific quiz questions with explanations
 │   └── supabase.ts          # Database client configuration
-├── reference-files/         # Educational source materials
-│   ├── knowledge-graph.pdf  # GraphRAG and Knowledge Graph concepts
-│   ├── memory-agents.txt    # AI agent memory systems
-│   ├── prompt-engineering/  # Advanced prompting techniques
-│   └── rag-systems.txt      # Retrieval-Augmented Generation
 └── types/
     └── index.ts             # TypeScript type definitions
 ```
+
+## 📖 Educational Content Sources
+
+- **Agent Architecture**: Based on comprehensive PDF materials covering agent components (perception, reasoning, memory, action), reasoning frameworks (ReAct, Plan-and-Execute, DPPM), memory architectures (7 patterns from context-window to Mem0), and multi-plan generation with reflection
+- **LLM, Prompt Engineering, RAG, Memory**: Curated educational content for foundational AI concepts
 
 ## 🎨 Design System
 
