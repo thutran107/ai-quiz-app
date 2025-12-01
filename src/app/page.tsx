@@ -24,7 +24,8 @@ export default function Home() {
     { id: 'llm', label: 'LLM' },
     { id: 'prompt-engineering', label: 'Prompt Engineering' },
     { id: 'rag', label: 'RAG' },
-    { id: 'memory', label: 'Memory' }
+    { id: 'memory', label: 'Memory' },
+    { id: 'agent-architecture', label: 'Agent Architecture' }
   ];
 
   const topicData = {
@@ -66,6 +67,13 @@ export default function Home() {
       },
       quizTopic: 'knowledgeGraph',
       description: 'Build and utilize knowledge graphs for semantic AI applications and reasoning'
+    },
+    'agent-architecture': {
+      icon: '🤖',
+      fullName: 'Agent Architecture',
+      knowledge: topicKnowledge.agentArchitecture,
+      quizTopic: 'agentArchitecture',
+      description: 'Design autonomous AI agents with perception, reasoning, memory, and action systems'
     }
   };
 

@@ -27,5 +27,11 @@ export const topicKnowledge = {
     what: "AI Memory Systems enable artificial intelligence to retain and recall information from previous interactions, maintaining context across conversations and sessions.",
     why: "Memory is vital for creating coherent, personalized AI experiences that can build upon past interactions and maintain long-term context understanding.",
     how: "Build memory systems by: 1) Implementing storage mechanisms (buffer, vector, semantic), 2) Creating retrieval and update strategies, 3) Managing memory capacity and relevance scoring."
+  } as TopicKnowledge,
+
+  agentArchitecture: {
+    what: "Agent Architecture defines how AI agents are structured with four core components: Perception (processing inputs via text, tools, or multimodal data), Reasoning & Planning (decomposing tasks using frameworks like ReAct or Plan-and-Execute), Memory (storing context beyond model weights), and Action (executing tasks through tool use).",
+    why: "Understanding agent architecture is essential for building autonomous AI systems that can pursue goals independently, adapt dynamically to environments, and handle complex multi-step tasks requiring foresight and planning—capabilities that distinguish agents from simple LLMs or static workflows.",
+    how: "Implement agent architectures by: 1) Choosing perception systems (text-based for chat, tool-augmented for APIs/data, multimodal for GUI interaction), 2) Selecting planning frameworks (ReAct for simple tasks with lower latency, Plan-and-Execute for complex tasks requiring transparency, or DPPM for parallel execution), 3) Integrating memory and action systems with appropriate tools."
   } as TopicKnowledge
 };
